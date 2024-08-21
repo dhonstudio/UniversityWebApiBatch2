@@ -67,5 +67,18 @@ namespace UniversityWebApiBatch2.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("CreateFromGithub")]
+        public IActionResult CreateFromGithub([FromBody] StudentCreateFromGithubDTO studentDTO)
+        {
+            var result = _studentFeature.CreateFromGithub(studentDTO.Username);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
     }
 }
