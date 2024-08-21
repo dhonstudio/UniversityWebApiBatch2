@@ -31,13 +31,8 @@ namespace Application.Features.StudentFeature
 
         public Student CreateStudent(StudentDTO studentDTO)
         {
-            //var student = _mapper.Map<Student>(studentDTO);
-            var student = new Student
-            {
-                FirstMidName = studentDTO.FirstMidName,
-                LastName = studentDTO.LastName
-            };
-            
+            var student = _mapper.Map<Student>(studentDTO);
+
             _studentRepository.Add(student);
             _unitOfWork.SaveChanges();
 
