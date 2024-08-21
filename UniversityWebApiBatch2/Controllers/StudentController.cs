@@ -69,9 +69,9 @@ namespace UniversityWebApiBatch2.Controllers
         }
 
         [HttpPost("CreateFromGithub")]
-        public IActionResult CreateFromGithub([FromBody] StudentCreateFromGithubDTO studentDTO)
+        public async Task<IActionResult> CreateFromGithub([FromBody] StudentCreateFromGithubDTO studentDTO)
         {
-            var result = _studentFeature.CreateFromGithub(studentDTO.Username);
+            var result = await _studentFeature.CreateFromGithub(studentDTO.Username);
 
             if (result == null)
             {

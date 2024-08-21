@@ -1,4 +1,5 @@
 using Application;
+using Interconnection;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationLayer();
 builder.Services.AddPersistenceLayer(builder.Configuration);
+builder.Services.AddInterconnectionLayer(builder.Configuration);
 
 var app = builder.Build();
 

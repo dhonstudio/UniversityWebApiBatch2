@@ -24,6 +24,8 @@ namespace Interconnection.Repository
         {
             var client = _httpClientFactory.CreateClient();
 
+            client.DefaultRequestHeaders.Add("User-Agent", "C# App");
+
             var user = await client
                 .GetFromJsonAsync<GithubUser>($"{BaseUrl}/users/{username}");
 
