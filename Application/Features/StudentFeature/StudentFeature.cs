@@ -11,15 +11,18 @@ namespace Application.Features.StudentFeature
         private readonly IBaseRepository<Student> _studentRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IGithubRepository _githubRepository;
 
         public StudentFeature(
             IBaseRepository<Student> studentRepository,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IGithubRepository githubRepository)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _githubRepository = githubRepository;
         }
 
         public List<Student> GetAllStudents()
@@ -68,6 +71,37 @@ namespace Application.Features.StudentFeature
             }
 
             _studentRepository.Delete(student);
+            _unitOfWork.SaveChanges();
+
+            return student;
+        }
+
+        public async Task<Student?> CreateFromGithub(string username)
+        {
+            var user = await _githubRepository.GetUser(username);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            if (user.Name == null)
+            {
+                throw new Exception("Nama user kosong");
+            }
+
+            var student = new Student
+            {
+                FirstMidName = string.Join(' ', user.Name.Split(' ').SkipLast(1)),
+                LastName = user.Name.Split(' ').Last()
+            };
+
+            if (student.FirstMidName == "")
+            {
+                student.FirstMidName = student.LastName;
+            }
+
+            _studentRepository.Add(student);
             _unitOfWork.SaveChanges();
 
             return student;
