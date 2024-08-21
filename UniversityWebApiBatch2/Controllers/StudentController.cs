@@ -54,5 +54,18 @@ namespace UniversityWebApiBatch2.Controllers
 
             return Ok(result);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var result = _studentFeature.DeleteStudentById(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
     }
 }

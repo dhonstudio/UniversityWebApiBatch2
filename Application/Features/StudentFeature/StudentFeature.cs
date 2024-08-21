@@ -57,5 +57,20 @@ namespace Application.Features.StudentFeature
 
             return student;
         }
+
+        public Student? DeleteStudentById(int id)
+        {
+            var student = _studentRepository.GetById(id);
+
+            if (student == null)
+            {
+                return null;
+            }
+
+            _studentRepository.Delete(student);
+            _unitOfWork.SaveChanges();
+
+            return student;
+        }
     }
 }
