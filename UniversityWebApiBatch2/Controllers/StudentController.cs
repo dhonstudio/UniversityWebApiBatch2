@@ -41,5 +41,18 @@ namespace UniversityWebApiBatch2.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] StudentDTO studentDTO)
+        {
+            var result = _studentFeature.UpdateStudentById(id, studentDTO);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
     }
 }

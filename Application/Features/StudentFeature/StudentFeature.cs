@@ -12,7 +12,10 @@ namespace Application.Features.StudentFeature
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public StudentFeature(IBaseRepository<Student> studentRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public StudentFeature(
+            IBaseRepository<Student> studentRepository,
+            IMapper mapper,
+            IUnitOfWork unitOfWork)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
@@ -34,6 +37,22 @@ namespace Application.Features.StudentFeature
             var student = _mapper.Map<Student>(studentDTO);
 
             _studentRepository.Add(student);
+            _unitOfWork.SaveChanges();
+
+            return student;
+        }
+
+        public Student? UpdateStudentById(int id, StudentDTO studentDTO)
+        {
+            var student = _studentRepository.GetById(id);
+
+            if (student == null)
+            {
+                return null;
+            }
+
+            _mapper.Map(studentDTO, student);
+            _studentRepository.Update(student);
             _unitOfWork.SaveChanges();
 
             return student;
