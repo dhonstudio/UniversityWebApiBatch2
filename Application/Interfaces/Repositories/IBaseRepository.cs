@@ -5,7 +5,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface IBaseRepository<T> where T : BaseEntity
     {
-        T GetById(int id);
+        T? GetById(int id);
         List<T> GetAll();
         T Add(T entity);
         T Update(T entity);
