@@ -9,6 +9,7 @@ namespace Application.Mappers
         public StudentMapper()
         {
             CreateMap<StudentDTO, Student>();
+
             CreateMap<Student, StudentResponseDTO>()
                 .ForMember(x => x.FullName, src => src.MapFrom(x => $"{x.FirstMidName} {x.LastName}"));
         }

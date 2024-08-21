@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Repositories;
@@ -15,6 +16,7 @@ namespace Persistence
 
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IStudentRepository, StudentRepo>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

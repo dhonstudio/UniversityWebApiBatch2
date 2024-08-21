@@ -40,7 +40,8 @@ namespace Persistence
         {
             foreach (var entry in ChangeTracker.Entries())
             {
-                if (entry.Entity is Student item)
+                if (entry.Entity is Student item
+                    && entry.State == EntityState.Deleted)
                 {
                     item.DeletedAt = DateTime.Now;
                     entry.State = EntityState.Modified;
