@@ -1,0 +1,6 @@
+@UniversityWebApiBatch2_HostAddress = http://localhost:5220
+
+GET {{UniversityWebApiBatch2_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
