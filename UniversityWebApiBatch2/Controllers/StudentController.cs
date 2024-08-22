@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UniversityWebApiBatch2.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator,Pengguna")]
     [Route("[controller]")] 
     [ApiController]
     public class StudentController : ControllerBase
@@ -20,13 +20,6 @@ namespace UniversityWebApiBatch2.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var claim = User.Claims;
-            var roleid = Convert.ToInt32(claim.FirstOrDefault(x => x.Type == "roleid").Value);
-
-            if (roleid != 1) {
-                return BadRequest("Tidak memiliki akses");
-            }
-
             return Ok(_studentFeature.GetAllStudents());
         }
 

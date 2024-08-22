@@ -38,7 +38,7 @@ namespace Application.Features.AuthFeature
                 new Claim(JwtRegisteredClaimNames.Sub, username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("roleid", Convert.ToInt32(roleid).ToString()),
-                new Claim("rolename", rolename),
+                new Claim(ClaimTypes.Role, rolename),
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
