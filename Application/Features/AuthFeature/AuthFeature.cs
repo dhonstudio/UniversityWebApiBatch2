@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Application.Interfaces;
+using Application.Interfaces.Repositories;
+using AutoMapper;
+using Domain.DTO;
+using Domain.Entities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -10,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.AuthFeature
 {
-    public class AuthFeature(IConfiguration configuration)
+    public class AuthFeature(IConfiguration configuration, IBaseRepository<Users> repository, IMapper mapper, IUnitOfWork unitOfWork)
     {
         public string GenerateToken(string username)
         {
@@ -36,6 +41,20 @@ namespace Application.Features.AuthFeature
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public UsersDTO CreateUser(UsersParamsDTO userParam)
+        {
+            var userExist = repository.Find(x => x.Username == userParam.Username);
+            if (userExist.Count() > 0) {
+                throw new Exception("Username sudah ada");
+            }
+            var user = mapper.Map<Users>(userParam);
+            repository.Add(user);
+            unitOfWork.SaveChanges();
+
+            var userDTO = mapper.Map<UsersDTO>(user);
+            return userDTO;
         }
     }
 }

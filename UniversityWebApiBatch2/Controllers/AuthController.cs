@@ -21,5 +21,11 @@ namespace UniversityWebApiBatch2.Controllers
             }
             return Unauthorized();
         }
+
+        [HttpPost("create")]
+        public IActionResult createUser(UsersParamsDTO userParam)
+        {
+            authFeature.CreateUser(userParam);
+        }
     }
 }
