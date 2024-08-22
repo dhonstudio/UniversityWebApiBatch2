@@ -76,6 +76,13 @@ namespace Application.Features.StudentFeature
             return student;
         }
 
+        public async Task<List<Student>> GetFromInterkoneksi()
+        {
+            var student = await _githubRepository.GetStudentInterkoneksi();
+
+            return student;
+        }
+
         public async Task<Student?> CreateFromGithub(string username)
         {
             var user = await _githubRepository.GetUser(username);

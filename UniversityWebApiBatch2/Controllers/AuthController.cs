@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UniversityWebApiBatch2.Controllers
 {
+    [Route("[controller]")]
     public class AuthController(AuthFeature authFeature, IMapper mapper) : Controller
     {
         [HttpPost("login")]

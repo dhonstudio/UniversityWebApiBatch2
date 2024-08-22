@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UniversityWebApiBatch2.Controllers
 {
-    [Authorize(Policy = "AdminOnly")]
+    //[Authorize(Policy = "AdminOnly")]
     [Route("[controller]")] 
     [ApiController]
     public class StudentController : ControllerBase
@@ -17,7 +17,8 @@ namespace UniversityWebApiBatch2.Controllers
             _studentFeature = studentFeature;
         }
 
-        [HttpGet]
+        [Authorize]
+        [HttpGet()]
         public IActionResult GetAll()
         {
             return Ok(_studentFeature.GetAllStudents());
@@ -61,6 +62,19 @@ namespace UniversityWebApiBatch2.Controllers
         public IActionResult Delete(int id)
         {
             var result = _studentFeature.DeleteStudentById(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("getinterkoneksi")]
+        public async Task<IActionResult> GetFromInterkoneksi()
+        {
+            var result = await _studentFeature.GetFromInterkoneksi();
 
             if (result == null)
             {
