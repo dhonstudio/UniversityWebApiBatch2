@@ -9,17 +9,23 @@ namespace UniversityWebApiBatch2.Controllers
         [HttpPost("login")]
         public IActionResult login([FromBody] LoginParamsDTO loginModel)
         {
-            if (loginModel.Username == "string" && loginModel.Password == "string")
+            try
             {
-                var token = authFeature.GenerateToken(loginModel.Username);
-
-                var finalToken = new
+                if (authFeature.Login(loginModel))
                 {
-                    Token = token
-                };
-                return Ok(finalToken);
+                    var token = authFeature.GenerateToken(loginModel.Username);
+
+                    var finalToken = new
+                    {
+                        Token = token
+                    };
+                    return Ok(finalToken);
+                }
+                return Unauthorized();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
-            return Unauthorized();
         }
 
         [HttpPost("create")]

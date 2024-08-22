@@ -65,5 +65,25 @@ namespace Application.Features.AuthFeature
             var userDTO = mapper.Map<UsersDTO>(user);
             return userDTO;
         }
+
+        public bool Login(LoginParamsDTO loginParams)
+        {
+            var userExist = repository.Find(x => x.Username == loginParams.Username);
+            if (userExist.Count() == 0)
+            {
+                throw new Exception("Username tidak ditemukan");
+            }
+
+            var result = passwordHasher.VerifyHashedPassword(
+                loginParams,
+                userExist.FirstOrDefault().Password,
+                loginParams.Password);
+            if (result != PasswordVerificationResult.Success)
+            {
+                throw new Exception("Password salah");
+            }
+
+            return result == PasswordVerificationResult.Success;
+        }
     }
 }
