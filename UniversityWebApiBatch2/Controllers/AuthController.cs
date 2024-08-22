@@ -41,5 +41,20 @@ namespace UniversityWebApiBatch2.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("create/role")]
+        public IActionResult createUserRole(UsersRoleParamsDTO userRoleParam)
+        {
+            try
+            {
+                var result = authFeature.CreateUserRole(userRoleParam);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

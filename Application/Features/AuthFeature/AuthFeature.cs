@@ -19,6 +19,7 @@ namespace Application.Features.AuthFeature
     public class AuthFeature(
         IConfiguration configuration, 
         IBaseRepository<Users> repository, 
+        IBaseRepository<UsersRole> roleRepository, 
         IMapper mapper, 
         IUnitOfWork unitOfWork,
         IPasswordHasher<object> passwordHasher)
@@ -64,6 +65,28 @@ namespace Application.Features.AuthFeature
 
             var userDTO = mapper.Map<UsersDTO>(user);
             return userDTO;
+        }
+
+        public UsersRoleDTO CreateUserRole(UsersRoleParamsDTO userRoleParam)
+        {
+            var user = repository.Find(x => x.Username == userRoleParam.Username).FirstOrDefault();
+            if (user == null)
+            {
+                throw new Exception("Username tidak ditemukan");
+            }
+
+            var userRoleExist = roleRepository.Find(x => x.IdUser == user.Id && x.IdRole == userRoleParam.IdRole);
+            if (userRoleExist.Count() > 0)
+            {
+                throw new Exception("Role sudah pernah ditambahkan");
+            }
+
+            var userRole = mapper.Map<UsersRole>(userRoleParam);
+            roleRepository.Add(userRole);
+            unitOfWork.SaveChanges();
+
+            var userRoleDTO = mapper.Map<UsersRoleDTO>(userRole);
+            return userRoleDTO;
         }
 
         public bool Login(LoginParamsDTO loginParams)

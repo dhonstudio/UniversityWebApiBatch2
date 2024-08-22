@@ -15,6 +15,9 @@ namespace Application.Mappers
         {
             CreateMap<UsersParamsDTO, Users>();
             CreateMap<Users, UsersDTO>();
+
+            CreateMap<UsersRoleParamsDTO, UsersRole>();
+            CreateMap<UsersRole, UsersRoleDTO>();
         }
     }
 }
