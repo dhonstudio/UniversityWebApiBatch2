@@ -115,5 +115,20 @@ namespace Application.Features.AuthFeature
 
             return result == PasswordVerificationResult.Success;
         }
+
+        public bool ChangeRole(UsersRoleParamsDTO userRoleParam)
+        {
+            var userExist = repository.Find(x => x.Username == userRoleParam.Username).FirstOrDefault();
+            if (userExist == null)
+            {
+                throw new Exception("User tidak ditemukan");
+            }
+            var roleExist = roleRepository.Find(x => x.IdUser == userExist.Id && x.IdRole == userRoleParam.IdRole).FirstOrDefault();
+            if (roleExist == null)
+            {
+                throw new Exception("Tidak memiliki Role ini");
+            }
+            return true;
+        }
     }
 }
