@@ -29,6 +29,28 @@ namespace UniversityWebApiBatch2.Controllers
             }
         }
 
+        [HttpPost("generatepublictoken")]
+        public IActionResult generatePublic([FromHeader] string ClientId, [FromHeader] string ClientSecret)
+        {
+            try
+            {
+                var token = authFeature.GeneratePublicToken(Request);
+
+                if (token != null) { 
+                    var finalToken = new
+                    {
+                        Token = token
+                    };
+                    return Ok(finalToken);
+                }
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("create")]
         public IActionResult createUser(UsersParamsDTO userParam)
         {

@@ -3,6 +3,7 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.DTO;
 using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -53,6 +54,38 @@ namespace Application.Features.AuthFeature
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public string GeneratePublicToken(HttpRequest request)
+        {
+            var clientId = request.Headers.FirstOrDefault(x => x.Key.ToLower() == "clientid").Value;
+            var clientSecret = request.Headers.FirstOrDefault(x => x.Key.ToLower() == "clientsecret").Value;
+
+            if (clientId == configuration["PublicToken:ClientId"] && clientSecret == configuration["PublicToken:ClientSecret"])
+            {
+                var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
+                var issuer = configuration["Jwt:Issuer"];
+                var audience = configuration["Jwt:Audience"];
+
+                var claims = new[]
+                {
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = DateTime.UtcNow.AddHours(2),
+                    Issuer = issuer,
+                    Audience = audience,
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
+                };
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                return tokenHandler.WriteToken(token);
+            }
+            return null;
         }
 
         public UsersDTO CreateUser(UsersParamsDTO userParam)
