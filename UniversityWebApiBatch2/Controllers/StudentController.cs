@@ -1,9 +1,11 @@
 ﻿using Application.Features.StudentFeature;
 using Domain.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UniversityWebApiBatch2.Controllers
 {
+    [Authorize]
     [Route("[controller]")] 
     [ApiController]
     public class StudentController : ControllerBase
