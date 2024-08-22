@@ -5,8 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistence;
 using System.Text;
+using Infra.Common;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseInfraLogging();
 
 // Add services to the container.
 

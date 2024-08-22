@@ -3,6 +3,7 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.DTO;
 using Domain.Entities;
+using Microsoft.Extensions.Logging;
 using Sieve.Models;
 using Sieve.Services;
 
@@ -15,25 +16,34 @@ namespace Application.Features.StudentFeature
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGithubRepository _githubRepository;
         private readonly ISieveProcessor _sieveProcessor;
+        private readonly ILogger<StudentFeature> _logger;
 
         public StudentFeature(
             IBaseRepository<Student> studentRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork,
             IGithubRepository githubRepository,
-            ISieveProcessor sieveProcessor)
+            ISieveProcessor sieveProcessor,
+            ILogger<StudentFeature> logger)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _githubRepository = githubRepository;
             _sieveProcessor = sieveProcessor;
+            _logger = logger;
         }
 
         public List<Student> GetAllStudents(SieveModel sieve)
         {
             var result = _studentRepository.GetAllSieve();
             var finalResult = _sieveProcessor.Apply(sieve, result);
+
+            if (finalResult.Count() > 0)
+            {
+                _logger.LogWarning("Seseorang melihat All Student");
+            }
+
             return finalResult.ToList();
         }
 

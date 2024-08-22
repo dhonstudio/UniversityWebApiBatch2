@@ -6,6 +6,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,8 @@ namespace Application.Features.AuthFeature
         IBaseRepository<UsersRole> roleRepository, 
         IMapper mapper, 
         IUnitOfWork unitOfWork,
-        IPasswordHasher<object> passwordHasher)
+        IPasswordHasher<object> passwordHasher,
+        ILogger<AuthFeature> logger)
     {
         public string GenerateToken(string username, UsersRoleDTO userRole = null)
         {
@@ -143,6 +145,7 @@ namespace Application.Features.AuthFeature
                 loginParams.Password);
             if (result != PasswordVerificationResult.Success)
             {
+                logger.LogWarning($"{loginParams.Username} salah memasukkan password");
                 throw new Exception("Password salah");
             }
 
