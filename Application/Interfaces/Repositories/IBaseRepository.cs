@@ -7,6 +7,7 @@ namespace Application.Interfaces.Repositories
     {
         T? GetById(int id);
         List<T> GetAll();
+        IQueryable<T> GetAllSieve();
         T Add(T entity);
         T Update(T entity);
         T Delete(T entity);

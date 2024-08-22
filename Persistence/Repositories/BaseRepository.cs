@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using Domain.Common;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Persistence.Repositories
@@ -33,6 +34,11 @@ namespace Persistence.Repositories
         public List<T> GetAll()
         {
             return SchoolContext.Set<T>().ToList();
+        }
+
+        public IQueryable<T> GetAllSieve()
+        {
+            return SchoolContext.Set<T>().AsNoTracking();
         }
 
         public T? GetById(int id)

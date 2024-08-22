@@ -2,6 +2,7 @@
 using Domain.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
 
 namespace UniversityWebApiBatch2.Controllers
 {
@@ -17,11 +18,11 @@ namespace UniversityWebApiBatch2.Controllers
             _studentFeature = studentFeature;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet()]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] SieveModel sieve)
         {
-            return Ok(_studentFeature.GetAllStudents());
+            return Ok(_studentFeature.GetAllStudents(sieve));
         }
 
         [HttpGet("{id}")]

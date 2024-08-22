@@ -3,6 +3,8 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.DTO;
 using Domain.Entities;
+using Sieve.Models;
+using Sieve.Services;
 
 namespace Application.Features.StudentFeature
 {
@@ -12,22 +14,27 @@ namespace Application.Features.StudentFeature
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGithubRepository _githubRepository;
+        private readonly ISieveProcessor _sieveProcessor;
 
         public StudentFeature(
             IBaseRepository<Student> studentRepository,
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            IGithubRepository githubRepository)
+            IGithubRepository githubRepository,
+            ISieveProcessor sieveProcessor)
         {
             _studentRepository = studentRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _githubRepository = githubRepository;
+            _sieveProcessor = sieveProcessor;
         }
 
-        public List<Student> GetAllStudents()
+        public List<Student> GetAllStudents(SieveModel sieve)
         {
-            return _studentRepository.GetAll();
+            var result = _studentRepository.GetAllSieve();
+            var finalResult = _sieveProcessor.Apply(sieve, result);
+            return finalResult.ToList();
         }
 
         public Student? GetStudentById(int id)
