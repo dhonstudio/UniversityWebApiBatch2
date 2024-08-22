@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UniversityWebApiBatch2.Controllers
 {
-    [Authorize(Roles = "Administrator,Pengguna")]
+    [Authorize(Policy = "AdminOnly")]
     [Route("[controller]")] 
     [ApiController]
     public class StudentController : ControllerBase

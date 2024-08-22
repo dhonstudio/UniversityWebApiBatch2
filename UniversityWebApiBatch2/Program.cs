@@ -62,6 +62,14 @@ builder.Services.AddAuthentication(option =>
     };
 });
 
+builder.Services.AddAuthorization(option =>
+{
+    option.AddPolicy("AdminOnly", policy =>
+    {
+        policy.RequireRole("Administrator", "Pengguna");
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
