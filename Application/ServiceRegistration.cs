@@ -1,5 +1,6 @@
 ﻿using Application.Features.AuthFeature;
 using Application.Features.StudentFeature;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -11,6 +12,7 @@ namespace Application
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<StudentFeature>();
             services.AddScoped<AuthFeature>();
+            services.AddScoped<IPasswordHasher<object>, PasswordHasher<object>>();
             return services;
         }
     }

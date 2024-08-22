@@ -25,7 +25,15 @@ namespace UniversityWebApiBatch2.Controllers
         [HttpPost("create")]
         public IActionResult createUser(UsersParamsDTO userParam)
         {
-            authFeature.CreateUser(userParam);
+            try
+            {
+                var result = authFeature.CreateUser(userParam);
+
+                return Ok(result);
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

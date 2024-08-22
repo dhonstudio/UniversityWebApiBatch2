@@ -3,6 +3,7 @@ using Application.Interfaces.Repositories;
 using AutoMapper;
 using Domain.DTO;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -15,7 +16,12 @@ using System.Threading.Tasks;
 
 namespace Application.Features.AuthFeature
 {
-    public class AuthFeature(IConfiguration configuration, IBaseRepository<Users> repository, IMapper mapper, IUnitOfWork unitOfWork)
+    public class AuthFeature(
+        IConfiguration configuration, 
+        IBaseRepository<Users> repository, 
+        IMapper mapper, 
+        IUnitOfWork unitOfWork,
+        IPasswordHasher<object> passwordHasher)
     {
         public string GenerateToken(string username)
         {
@@ -49,6 +55,9 @@ namespace Application.Features.AuthFeature
             if (userExist.Count() > 0) {
                 throw new Exception("Username sudah ada");
             }
+
+            userParam.Password = passwordHasher.HashPassword(userParam, userParam.Password);
+
             var user = mapper.Map<Users>(userParam);
             repository.Add(user);
             unitOfWork.SaveChanges();
