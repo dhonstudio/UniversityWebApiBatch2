@@ -1,4 +1,5 @@
-﻿using Application.Features.StudentFeature;
+﻿using Application.Features.AuthFeature;
+using Application.Features.StudentFeature;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -9,6 +10,7 @@ namespace Application
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<StudentFeature>();
+            services.AddScoped<AuthFeature>();
             return services;
         }
     }
