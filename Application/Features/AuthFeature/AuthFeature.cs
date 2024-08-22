@@ -24,16 +24,21 @@ namespace Application.Features.AuthFeature
         IUnitOfWork unitOfWork,
         IPasswordHasher<object> passwordHasher)
     {
-        public string GenerateToken(string username)
+        public string GenerateToken(string username, UsersRoleDTO userRole = null)
         {
             var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
             var issuer = configuration["Jwt:Issuer"];
             var audience = configuration["Jwt:Audience"];
 
+            var roleid = userRole == null ? RoleEnum.Pengguna : userRole.IdRole;
+            var rolename = userRole == null ? "Pengguna" : userRole.RoleName;
+
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("roleid", Convert.ToInt32(roleid).ToString()),
+                new Claim("rolename", rolename),
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
