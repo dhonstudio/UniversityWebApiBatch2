@@ -82,10 +82,12 @@ namespace Application.Features.AuthFeature
             }
 
             var userRole = mapper.Map<UsersRole>(userRoleParam);
+            userRole.IdUser = user.Id;
             roleRepository.Add(userRole);
             unitOfWork.SaveChanges();
 
             var userRoleDTO = mapper.Map<UsersRoleDTO>(userRole);
+            userRoleDTO.Username = userRoleParam.Username;
             return userRoleDTO;
         }
 
